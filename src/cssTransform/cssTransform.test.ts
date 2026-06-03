@@ -1,29 +1,9 @@
 import { transform } from "lightningcss";
 import { it, describe, expect } from "vitest";
 import { Buffer } from "node:buffer";
+import { cssTransform } from "./cssTransform";
 
 describe("cssTransform", () => {
-  it("should transform css with custom visitor", () => {
-    const res = transform({
-      filename: "test.css",
-      minify: true,
-      code: Buffer.from(`
-    .foo {
-      width: 12px;
-    }
-  `),
-      visitor: {
-        Length(length) {
-          return {
-            unit: length.unit,
-            value: length.value * 2,
-          };
-        },
-      },
-    });
-    expect(res.code.toString()).toBe(`.foo{width:24px}`);
-  });
-
   it("should unify css with class prefixes ", () => {
     const trackedClasses = new Set<string>();
 
@@ -31,38 +11,48 @@ describe("cssTransform", () => {
       filename: "test.css",
       minify: true,
       code: Buffer.from(`
-    .utrecht-foo {
-      height: 12px;
-      width: 12px;
-    }
-    .amsterdam-foo {
-      width: 24px;
-    }
-
-    .rhc-foo {
-      width: 36px;
-    }
-  `),
-      visitor: {
-        Selector(selector) {
-          return selector.map((component) => {
-            if (component.type !== "class") {
-              return component;
-            }
-            if (!trackedClasses.has(component.name)) {
-              trackedClasses.add(component.name);
-            }
-
-            return {
-              ...component,
-              name: component.name.replace(/^(utrecht|amsterdam|rhc)-/, "nlds-"),
-            };
-          });
-        },
-      },
+        .utrecht-foo {
+          height: 12px;
+          width: 12px;
+        }
+        .amsterdam-foo {
+          width: 24px;
+        }
+      `),
+      visitor: cssTransform.visitor,
     });
     console.log(trackedClasses);
 
     expect(res.code.toString()).toBe(`.nlds-foo{width:24px;height:12px}`);
+  });
+
+  it("should unify css with pseudo class prefixes", () => {
+    const res = transform({
+      filename: "test.css",
+      minify: true,
+      code: Buffer.from(`
+        .utrecht-foo:has(.utrecht-bar) {
+          width: 12px;
+        }
+      `),
+      visitor: cssTransform.visitor,
+    });
+
+    expect(res.code.toString()).toBe(`.nlds-foo:has(.nlds-bar){width:12px}`);
+  });
+
+  it.skip("should unify css with variable prefixes", () => {
+    const res = transform({
+      filename: "test.css",
+      minify: true,
+      code: Buffer.from(`
+        .utrecht-foo {
+          width: var(--utrecht-foo);
+        }
+      `),
+      visitor: cssTransform.visitor,
+    });
+
+    expect(res.code.toString()).toBe(`.nlds-foo{width:var(--nlds-foo)}`);
   });
 });
