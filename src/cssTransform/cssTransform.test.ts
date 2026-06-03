@@ -25,15 +25,22 @@ describe("cssTransform", () => {
   });
 
   it("should unify css with class prefixes ", () => {
+    const trackedClasses = new Set<string>();
+
     const res = transform({
       filename: "test.css",
       minify: true,
       code: Buffer.from(`
     .utrecht-foo {
+      height: 12px;
       width: 12px;
     }
     .amsterdam-foo {
       width: 24px;
+    }
+
+    .rhc-foo {
+      width: 36px;
     }
   `),
       visitor: {
@@ -42,15 +49,20 @@ describe("cssTransform", () => {
             if (component.type !== "class") {
               return component;
             }
+            if (!trackedClasses.has(component.name)) {
+              trackedClasses.add(component.name);
+            }
 
             return {
               ...component,
-              name: component.name.replace(/^(utrecht|amsterdam)-/, "nlds-"),
+              name: component.name.replace(/^(utrecht|amsterdam|rhc)-/, "nlds-"),
             };
           });
         },
       },
     });
-    expect(res.code.toString()).toBe(`.nlds-foo{width:24px}`);
+    console.log(trackedClasses);
+
+    expect(res.code.toString()).toBe(`.nlds-foo{width:24px;height:12px}`);
   });
 });
