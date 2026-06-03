@@ -5,10 +5,17 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit",
     "build": "vite build",
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@types/node": "^25.9.1",
+    "@types/react": "^19.2.16",
+    "@types/react-dom": "^19.2.3",
+    "lightningcss": "^1.32.0",
+    "typescript": "^6.0.3",
     "vite": "^8.0.12"
   },
   "dependencies": {
@@ -18,6 +25,7 @@
     "@rijkshuisstijl-community/icon-react": "^3.0.3",
     "@utrecht/page-body-react": "^1.0.13",
     "react": "19.2.7",
-    "react-dom": "19.2.7"
+    "react-dom": "19.2.7",
+    "vitest": "^4.1.8"
   }
 }
