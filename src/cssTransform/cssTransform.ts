@@ -2,6 +2,13 @@ import { SelectorComponent, Visitor } from "lightningcss";
 
 export const cssTransform: { visitor: Visitor<{}> } = {
   visitor: {
+    DashedIdent(dashedIdent) {
+      console.log(dashedIdent);
+      return dashedIdent.replace(
+        /^--(_?)(utrecht|amsterdam|rhc)-/,
+        "--$1nlds-",
+      );
+    },
     Selector(selector) {
       return selector.map((component) => {
         if (component.type === "pseudo-class") {

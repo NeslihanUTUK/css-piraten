@@ -41,7 +41,7 @@ describe("cssTransform", () => {
     expect(res.code.toString()).toBe(`.nlds-foo:has(.nlds-bar){width:12px}`);
   });
 
-  it.skip("should unify css with variable prefixes", () => {
+  it("should unify css with variable prefixes", () => {
     const res = transform({
       filename: "test.css",
       minify: true,
@@ -54,5 +54,20 @@ describe("cssTransform", () => {
     });
 
     expect(res.code.toString()).toBe(`.nlds-foo{width:var(--nlds-foo)}`);
+  });
+
+  it("should unify css with temp variable prefixes", () => {
+    const res = transform({
+      filename: "test.css",
+      minify: true,
+      code: Buffer.from(`
+        .utrecht-foo {
+          width: var(--_utrecht-foo);
+        }
+      `),
+      visitor: cssTransform.visitor,
+    });
+
+    expect(res.code.toString()).toBe(`.nlds-foo{width:var(--_nlds-foo)}`);
   });
 });
