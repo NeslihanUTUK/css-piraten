@@ -5,8 +5,6 @@ import { cssTransform } from "./cssTransform";
 
 describe("cssTransform", () => {
   it("should unify css with class prefixes ", () => {
-    const trackedClasses = new Set<string>();
-
     const res = transform({
       filename: "test.css",
       minify: true,
@@ -21,7 +19,6 @@ describe("cssTransform", () => {
       `),
       visitor: cssTransform.visitor,
     });
-    console.log(trackedClasses);
 
     expect(res.code.toString()).toBe(`.nlds-foo{width:24px;height:12px}`);
   });
@@ -69,5 +66,27 @@ describe("cssTransform", () => {
     });
 
     expect(res.code.toString()).toBe(`.nlds-foo{width:var(--_nlds-foo)}`);
+  });
+
+  it.only("should unify css with keyframe prefixes", () => {
+    const res = transform({
+      filename: "test.css",
+      minify: true,
+      code: Buffer.from(`
+        @keyframes utrecht-foo {
+          0% {
+            width: 0;
+          }
+          100% {
+            width: 100%;
+          }
+        }
+      `),
+      visitor: cssTransform.visitor,
+    });
+
+    expect(res.code.toString()).toBe(
+      `@keyframes nlds-foo{0%{width:0}to{width:100%}}`,
+    );
   });
 });

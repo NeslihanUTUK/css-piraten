@@ -5,9 +5,14 @@ export const cssTransform: { visitor: Visitor<{}> } = {
     DashedIdent(dashedIdent) {
       console.log(dashedIdent);
       return dashedIdent.replace(
-        /^--(_?)(utrecht|amsterdam|rhc)-/,
+        /^--(_?)(utrecht|ams|rhc|basis)-/,
         "--$1nlds-",
       );
+    },
+    Rule: {
+      keyframes(keyframe) {
+        console.log(keyframe);
+      },
     },
     Selector(selector) {
       return selector.map((component) => {
@@ -17,7 +22,7 @@ export const cssTransform: { visitor: Visitor<{}> } = {
             .map((pseudoSelector: SelectorComponent) => {
               if (pseudoSelector.type === "class") {
                 pseudoSelector.name = pseudoSelector.name.replace(
-                  /^(utrecht|amsterdam|rhc)-/,
+                  /^(utrecht|ams|rhc|basis)-/,
                   "nlds-",
                 );
               }
@@ -32,7 +37,7 @@ export const cssTransform: { visitor: Visitor<{}> } = {
 
         return {
           ...component,
-          name: component.name.replace(/^(utrecht|amsterdam|rhc)-/, "nlds-"),
+          name: component.name.replace(/^(utrecht|ams|rhc|basis)-/, "nlds-"),
         };
       });
     },
