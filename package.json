@@ -12,8 +12,12 @@
     "vite": "^8.0.12"
   },
   "dependencies": {
+    "@rijkshuisstijl-community/components-css": "^17.0.0",
     "@rijkshuisstijl-community/components-react": "^15.0.2",
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7"
+    "@rijkshuisstijl-community/design-tokens": "^15.0.0",
+    "@rijkshuisstijl-community/icon-react": "^3.0.3",
+    "@utrecht/page-body-react": "^1.0.13",
+    "react": "19.2.7",
+    "react-dom": "19.2.7"
   }
 }

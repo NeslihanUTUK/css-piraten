@@ -1,0 +1,19 @@
+.utrecht-page-body__content {
+  --utrecht-page-body-background-color: red;
+  padding-block: var(--rhc-space-5xl);
+  padding-inline: var(--rhc-space-5xl);
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.rhc-column-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+
+
+
+
