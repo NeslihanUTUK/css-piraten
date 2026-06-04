@@ -3,7 +3,6 @@ import { SelectorComponent, Visitor } from "lightningcss";
 export const cssTransform: { visitor: Visitor<{}> } = {
   visitor: {
     DashedIdent(dashedIdent) {
-      console.log(dashedIdent);
       return dashedIdent.replace(
         /^--(_?)(utrecht|ams|rhc|basis)-/,
         "--$1nlds-",
@@ -11,15 +10,15 @@ export const cssTransform: { visitor: Visitor<{}> } = {
     },
     Rule: {
       keyframes(keyframe) {
-        console.log(keyframe);
+        // todo: handle keyframes
       },
     },
     Selector(selector) {
       return selector.map((component) => {
-        if (component.type === "pseudo-class") {
+        if (component.type === "pseudo-class" && "selectors" in component) {
           component.selectors
             ?.flat()
-            .map((pseudoSelector: SelectorComponent) => {
+            .forEach((pseudoSelector: SelectorComponent) => {
               if (pseudoSelector.type === "class") {
                 pseudoSelector.name = pseudoSelector.name.replace(
                   /^(utrecht|ams|rhc|basis)-/,

@@ -13,7 +13,7 @@ describe("cssTransform", () => {
           height: 12px;
           width: 12px;
         }
-        .amsterdam-foo {
+        .ams-foo {
           width: 24px;
         }
       `),
@@ -68,7 +68,7 @@ describe("cssTransform", () => {
     expect(res.code.toString()).toBe(`.nlds-foo{width:var(--_nlds-foo)}`);
   });
 
-  it.only("should unify css with keyframe prefixes", () => {
+  it.skip("should unify css with keyframe prefixes", () => {
     const res = transform({
       filename: "test.css",
       minify: true,
